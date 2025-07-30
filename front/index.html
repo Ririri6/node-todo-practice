@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do</title>
+  </head>
+  <body>
+    <h1>タスク管理アプリ</h1>
+
+    <input
+      type="text"
+      id="inputTask"
+      name="inputTask"
+      placeholder="タスクを入力してください"
+    />
+    <button type="submit" onclick="sendTask()">追加</button>
+
+    <script>
+      async function sendTask() {
+        console.log("onClick!!");
+        const inputTask = document.querySelector("#inputTask");
+        console.log(inputTask.value);
+        const res = await fetch("/api/addTask", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            task: inputTask.value,
+          }),
+        });
+
+        const data = await res.json();
+        console.log(data);
+      }
+    </script>
+  </body>
+</html>
