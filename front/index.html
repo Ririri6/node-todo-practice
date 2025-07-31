@@ -15,24 +15,51 @@
       placeholder="タスクを入力してください"
     />
     <button type="submit" onclick="sendTask()">追加</button>
+    
+  </br>
+    <label>タスク一覧ページへ移動</label>
+    <button onclick="allTask()">タスク一覧を表示</button>
 
     <script>
       async function sendTask() {
         console.log("onClick!!");
         const inputTask = document.querySelector("#inputTask");
         console.log(inputTask.value);
-        const res = await fetch("/api/addTask", {
-          method: "POST",
+        if (inputTask.value === "") {
+          alert("タスクを入力してください");
+        } else {
+          const res = await fetch("/api/addTask", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              task: inputTask.value,
+            }),
+          });
+
+          const data = await res.json();
+          console.log(data);
+          inputTask.value = "";
+        }
+      }
+
+
+      async function allTask(){
+        console.log("allTasks!!");
+
+        const req=await fetch('api/allTasks',{
+          method:"GET",
           headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            task: inputTask.value,
-          }),
+              "Content-Type": "application/json",
+            },
         });
 
-        const data = await res.json();
-        console.log(data);
+        if(req.ok){
+          window.location.href="/alltasks";
+        }else{
+          console.log("error")
+        }
       }
     </script>
   </body>
